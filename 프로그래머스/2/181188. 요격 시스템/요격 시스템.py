@@ -1,6 +1,6 @@
 def solution(targets):
     sorted_targets = sorted(targets, key=lambda x: x[0])
-    o_s, o_e = -1, -1
+    o_s, o_e = -1, -1 # 0 <= s ..............
     answer = 0
     
     for s, e in sorted_targets:
