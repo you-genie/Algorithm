@@ -1,22 +1,22 @@
 class Solution:
     def findMedianSortedArrays(self, nums1, nums2):
-        nums = []
-        i, j = 0, 0
-        while i < len(nums1) and j < len(nums2):
-            if nums1[i] < nums2[j]:
-                nums.append(nums1[i])
-                i += 1
+        def findKth(nums1, nums2, k):
+            if len(nums1) > len(nums2):
+                return findKth(nums2, nums1, k)
+            if not nums1:
+                return nums2[k - 1]
+            if k == 1:
+                return min(nums1[0], nums2[0])
+
+            i, j = min(k // 2, len(nums1)), min(k // 2, len(nums2))
+            if nums1[i - 1] > nums2[j - 1]:
+                return findKth(nums1, nums2[j:], k - j)
             else:
-                nums.append(nums2[j])
-                j += 1
-        while i < len(nums1):
-            nums.append(nums1[i])
-            i += 1
-        while j < len(nums2):
-            nums.append(nums2[j])
-            j += 1
-        n = len(nums)
-        if n % 2 == 1:
-            return nums[n // 2]
+                return findKth(nums1[i:], nums2, k - i)
+
+        total_len = len(nums1) + len(nums2)
+        if total_len % 2 == 1:
+            return findKth(nums1, nums2, total_len // 2 + 1)
         else:
-            return (nums[n // 2 - 1] + nums[n // 2]) / 2
+            return (findKth(nums1, nums2, total_len // 2) +
+                    findKth(nums1, nums2, total_len // 2 + 1)) / 2
